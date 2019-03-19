@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2017 rel. 3 sp1 (x64) (http://www.altova.com) by ﻿VocaLink User (VocaLink Limited) -->
+<xs:schema xmlns="http://ap.com/xsd/message/iso20022/RFPBatchInput" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:rain2="urn:iso:std:iso:20022:tech:xs:rain.002.001.01" xmlns:rain1="urn:iso:std:iso:20022:tech:xs:rain.001.001.01" xmlns:ba="urn:iso:std:iso:20022:tech:xsd:head.001.001.01" targetNamespace="http://ap.com/xsd/message/iso20022/RFPBatchInput" elementFormDefault="qualified">
+    <xs:import namespace="urn:iso:std:iso:20022:tech:xs:rain.001.001.01" schemaLocation="../common/rain.001.001.01.xsd"/>
+    <xs:import namespace="urn:iso:std:iso:20022:tech:xs:rain.002.001.01" schemaLocation="../common/rain.002.001.01.xsd"/>
+    <xs:import namespace="urn:iso:std:iso:20022:tech:xsd:head.001.001.01" schemaLocation="../common/head.001.001.01.xsd"/>
+    <xs:element name="RFPBatchFile" type="RFPBatchFile"/>
+    <xs:complexType name="RFPBatchFile">
+        <xs:sequence>
+            <xs:element name="Hdr" type="HeaderDetails"/>
+            <xs:element name="LogclFile" type="LogclFileDetails" maxOccurs="unbounded"/>
+            <xs:element name="Trlr" type="Trailerdetails" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="LogclFileDetails">
+        <xs:sequence>
+            <xs:element name="LogclHdr" type="LogicalHeaderDetails"/>
+            <xs:element name="Message" type="MessageDetail"/>
+            <xs:element name="LogclTrlr" type="LogicalTrailerdetails" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="MessageDetail">
+        <xs:choice>
+            <xs:element name="ReqMessage" type="ReqMessageType" maxOccurs="unbounded"/>
+            <xs:element name="RspnMessage" type="ResMessageType" maxOccurs="unbounded"/>
+        </xs:choice>
+    </xs:complexType>
+    <xs:complexType name="ReqMessageType">
+        <xs:sequence>
+            <xs:element name="MsgRef" type="Max35Text"/>
+            <xs:element name="ReqPayload" type="ReqPayloadType"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="ResMessageType">
+        <xs:sequence>
+            <xs:element name="MsgRef" type="Max35Text"/>
+            <xs:element name="RspnPayload" type="ResPayloadType"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="ReqPayloadType">
+        <xs:sequence>
+            <xs:element ref="ba:AppHdr"/>
+            <xs:element ref="rain1:Document"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="ResPayloadType">
+        <xs:sequence>
+            <xs:element ref="ba:AppHdr"/>
+            <xs:element ref="rain2:Document"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="HeaderDetails">
+        <xs:sequence>
+            <xs:element name="FileTp" type="Max35Text"/>
+            <xs:element name="FileRef" type="Max35Text"/>
+            <xs:element name="SndgPty" type="PartyDetails"/>
+            <xs:element name="RcptPty" type="PartyDetails" maxOccurs="1"/>
+            <xs:element name="FileBusDt" type="ISODateTime"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="PartyDetails">
+        <xs:sequence>
+            <xs:element name="Id" type="Max35Text"/>
+            <xs:element name="Tp" type="PartyTypeCode"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="PartyTypeCode">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="DSTR"/>
+            <xs:enumeration value="FINI"/>
+            <xs:enumeration value="ACQR"/>
+            <xs:enumeration value="CISS"/>
+            <xs:enumeration value="SCHM"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="LogicalHeaderDetails">
+        <xs:sequence>
+            <xs:element name="LogclFileRef" type="Max35Text"/>
+            <xs:element name="MsgTp" type="Max35Text"/>
+            <xs:element name="SndgPty" type="PartyDetails"/>
+            <xs:element name="Acqrr" type="PartyDetails" minOccurs="0"/>
+            <xs:element name="Issr" type="PartyDetails" minOccurs="0"/>
+            <xs:element name="RcptPty" type="PartyDetails"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="Max35Text">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1"/>
+            <xs:maxLength value="35"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="LogicalTrailerdetails">
+        <xs:sequence>
+            <xs:element name="NbOfTxs" type="Number"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="Number">
+        <xs:restriction base="xs:decimal">
+            <xs:fractionDigits value="0"/>
+            <xs:totalDigits value="18"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="Trailerdetails">
+        <xs:sequence>
+            <xs:element name="LogclFileCnt" type="Number"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="ISODateTime">
+        <xs:restriction base="xs:dateTime"/>
+    </xs:simpleType>
+</xs:schema>

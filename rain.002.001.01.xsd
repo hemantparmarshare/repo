@@ -5,7 +5,7 @@
 1)Added MSGFUNCTIONS
 
 -->
-<xs:schema xmlns="urn:iso:std:iso:20022:tech:xsd:rain.002.001.01" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:iso:std:iso:20022:tech:xsd:rain.002.001.01" elementFormDefault="qualified">
+<xs:schema xmlns="urn:iso:std:iso:20022:tech:xs:rain.002.001.01" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:iso:std:iso:20022:tech:xs:rain.002.001.01" elementFormDefault="qualified">
 	<xs:element name="Document" type="Document"/>
 	<xs:complexType name="AcceptorAuthorisationRequest7">
 		<xs:sequence>
@@ -551,7 +551,7 @@
 		<xs:sequence>
 			<xs:element name="Tp" type="TxTypeEnum"/>
 			<xs:element name="AddtlSvc" type="AddtlSvcType" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="AddnlTxTp" type="AddnlTxTpEnum" minOccurs="0"/>
+			<xs:element name="AddnlTxTp" type="AddnlTxTpEnum"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:simpleType name="AddtlSvcType">
@@ -679,7 +679,7 @@
 			<xs:element name="MrchntCtgyCd" type="Min3Max4Text" minOccurs="0" maxOccurs="1"/>
 			<xs:element name="InstrForRcpntPty" type="InstrForRcpntPtydetails" minOccurs="0" maxOccurs="1"/>
 			<!-- <xs:element name="CardPrgrmmPropsd removed" type="Max35Text" minOccurs="0" maxOccurs="unbounded"/>
-			<xs:element name="CardPrgrmmApld remove" type="Max35Text" minOccurs="0" maxOccurs="unbounded"/> 
+			<xs:element name="CardPrgrmmApld remove" type="Max35Text" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="SaleRef" type="Max35Text" minOccurs="0" maxOccurs="1"/>-->
 			<xs:element name="TxId" type="TransactionIdentifier1"/>
 			<!--<xs:element name="AddntlIds" type="IBPTransactionIdentifier1" minOccurs="0" maxOccurs="1"/> -->
@@ -689,6 +689,8 @@
 			<xs:element name="SttlmInf" type="SettlementInstruction4" minOccurs="0"/>
 			<!--<xs:element name="MrchntRefData" type="Max70Text" minOccurs="0" maxOccurs="1"/>-->
 			<xs:element name="AuthstnRslt" type="AuthorisationResult7" minOccurs="0"/>
+			<xs:element name="TxSts" type="TxStsType" minOccurs="0"/>
+			<xs:element name="SttlmSts" type="SttlmStsType" minOccurs="0"/>
 			<xs:element name="AcctFr" type="CardAccount14" minOccurs="0" maxOccurs="1"/>
 			<xs:element name="AcctTo" type="CardAccount14" minOccurs="0" maxOccurs="1"/>
 			<xs:element name="RskInd" type="IBPRiskAsmt" minOccurs="0" maxOccurs="unbounded"/>
@@ -1182,6 +1184,8 @@
 	<xs:complexType name="PstngInfoType">
 		<xs:sequence>
 			<xs:element name="PstngDt" type="ISODateTime" minOccurs="0"/>
+			<xs:element name="Desc" type="Max256Text" minOccurs="0"/>
+			<xs:element name="PstngRef" type="Max35Text" minOccurs="0"/>
 			<xs:element name="EstmtdPstngTm" type="Number" minOccurs="0"/>
 		</xs:sequence>
 	</xs:complexType>
