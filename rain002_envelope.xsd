@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2017 rel. 3 sp1 (x64) (http://www.altova.com) by ﻿VocaLink User (VocaLink Limited) -->
+<xs:schema xmlns="http://ap.com/xsd/message/iso20022/rain.002.01" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ba="urn:iso:std:iso:20022:tech:xsd:head.001.001.01" xmlns:rain2="urn:iso:std:iso:20022:tech:xsd:rain.002.001.01" xmlns:rain13="urn:iso:std:iso:20022:tech:xsd:rain.013.001.01" targetNamespace="http://ap.com/xsd/message/iso20022/rain.002.01" elementFormDefault="qualified">
+	<xs:import namespace="urn:iso:std:iso:20022:tech:xsd:rain.002.001.01" schemaLocation="rain.002.001.01.xsd"/>
+	<xs:import namespace="urn:iso:std:iso:20022:tech:xsd:rain.013.001.01" schemaLocation="rain.013.001.01.xsd"/>
+	<xs:import namespace="urn:iso:std:iso:20022:tech:xsd:head.001.001.01" schemaLocation="head.001.001.01.xsd"/>
+	<xs:element name="ResponsePayload" type="PayloadType"/>
+	<xs:complexType name="PayloadType">
+		<xs:sequence>
+			<xs:element ref="ba:AppHdr"/>
+			<xs:choice>
+				<xs:element ref="rain2:Document"/>
+				<xs:element ref="rain13:Document"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>
