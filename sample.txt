@@ -1,0 +1,104 @@
+package com.billpay.main;
+
+import java.io.File;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+
+
+public class CreateXMLDOM {
+
+    public static void main(String[] args) {
+        DocumentBuilderFactory icFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder icBuilder;
+        try {
+            icBuilder = icFactory.newDocumentBuilder();
+            Document doc = icBuilder.newDocument();
+           
+            Element mainRootElement = doc.createElementNS("", "EndUsrMntncBtchInpt");
+            mainRootElement.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+            mainRootElement.setAttribute("xmlns:n1","http://ap.com/xsd/message/iso20022/EndUsrMntncBtchInpt");
+            mainRootElement.setAttribute("xmlns:eumt1","urn:iso:std:iso:20022:tech:xs:eumt.001.001.01");
+            mainRootElement.setAttribute("xmlns:ba","urn:iso:std:iso:20022:tech:xsd:head.001.001.01");
+            mainRootElement.setAttribute("xsi:schemaLocation","http://ap.com/xsd/message/iso20022/EndUsrMntncBtchInpt");
+            
+            doc.appendChild(mainRootElement);
+
+            // append child elements to root element
+            mainRootElement.appendChild(getHdr(doc, "EndUsrMntncBtchInpt", "DEBABQW9235", "RPPS","Zapp","2019-03-11T00:00:00Z"));
+
+            mainRootElement.appendChild(getLogclFile(doc, "EndUsrMntncBtchInpt", "DEBABQW9235", "RPPS","Zapp","2019-03-11T00:00:00Z"));
+
+            mainRootElement.appendChild(getTrlr(doc, "EndUsrMntncBtchInpt", "DEBABQW9235", "RPPS","Zapp","2019-03-11T00:00:00Z"));
+
+            // output DOM XML to console 
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes"); 
+            DOMSource source = new DOMSource(doc);
+            StreamResult console = new StreamResult(System.out);
+            transformer.transform(source, console);
+
+            System.out.println("\nXML DOM Created Successfully..");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // get  hdr
+    private static Node getHdr(Document doc, String FileTp, String FileRef, String SndgPty, String RcptPty,String FileBusDt ) {
+        Element hdr = doc.createElement("n1:Hdr");
+        hdr.appendChild(getCompanyElements(doc, hdr, "n1:FileTp", FileTp));
+        hdr.appendChild(getCompanyElements(doc, hdr, "n1:FileRef", FileRef));
+        hdr.appendChild(getCompanyElement(doc, hdr, "n1:SndgPty"));
+        Element SndgPty1 = doc.createElement("n1:SndgPty");
+        
+        SndgPty1.appendChild(getCompanyElement(doc, hdr, "n1:SndgPty"));
+       // SndgPty1.setAttribute("n1:Id", "RPPS");
+       
+        hdr.appendChild(getCompanyElements(doc, hdr, "n1:FileBusDt", FileBusDt));
+        return hdr;
+    }
+
+    
+    // get logicalfile
+        private static Node getLogclFile(Document doc, String FileTp, String FileRef, String SndgPty, String RcptPty,String FileBusDt ) {
+        Element LogclFile = doc.createElement("n1:LogclFile");
+        LogclFile.appendChild(getCompanyElements(doc, LogclFile, "n1:LogclFileHdr", FileTp));
+   
+        return LogclFile;
+    }
+    
+    
+    private static Node getTrlr(Document doc, String FileTp, String FileRef, String SndgPty, String RcptPty,String FileBusDt ) {
+        Element Trlr = doc.createElement("n1:Trlr");
+        Trlr.appendChild(getCompanyElements(doc, Trlr, "n1:Trlr", FileTp));
+   
+        return Trlr;
+    }
+
+    
+    // utility method to create text node
+    private static Node getCompanyElements(Document doc, Element element, String name, String value) {
+        Element node = doc.createElement(name);
+        node.appendChild(doc.createTextNode(value));
+        return node;
+    }
+    
+    // utility method to create text node
+    private static Node getCompanyElement(Document doc, Element element, String name) {
+        Element node = doc.createElement(name);
+      //  node.appendChild(doc.createTextNode(value));
+        return node;
+    }
+}
